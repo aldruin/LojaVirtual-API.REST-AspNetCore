@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace LojaVirtual.Domain.Entities
 {
-    public sealed class Cart : Entity
+    public abstract class Entity
     {
-        protected Cart() { }
-
-        public Guid UserId { get; set; }
-        public ICollection<CartProduct> Products { get; set; }
+        protected Entity()
+        {
+            Id = Guid.NewGuid();
+        }
+        public Guid Id { get; set; }
     }
 }

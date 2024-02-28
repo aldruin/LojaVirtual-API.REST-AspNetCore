@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace LojaVirtual.Domain.Entities
 {
-    public sealed class Product
+    public sealed class Product : Entity
     {
+        protected Product() { }
+
+        public string Name{ get; set; }
+        public decimal Value{ get; set; }
+        public int Quantity { get; set; }
+        public string Description { get; set; }
     }
 }
