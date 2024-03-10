@@ -8,11 +8,17 @@ namespace LojaVirtual.Domain.Entities
 {
     public sealed class Product : Entity
     {
-        protected Product() { }
+        public Product(string name, decimal price, int stock, string description)
+        {
+            Name = name;
+            Price = price;
+            Stock = stock;
+            Description = description;
+        }
 
-        public string Name{ get; set; }
-        public decimal Value{ get; set; }
-        public int Quantity { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public int Stock { get; set; }
         public string Description { get; set; }
     }
 }

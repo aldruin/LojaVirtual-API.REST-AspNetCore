@@ -13,13 +13,44 @@ namespace LojaVirtual.Infrastructure.Mapping
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            builder.ToTable("Products");
-            builder.HasKey(p => p.Id);
-            builder.Property(p => p.Id).ValueGeneratedOnAdd();
-            builder.Property(p => p.Name).IsRequired().HasMaxLength(128);
-            builder.Property(p => p.Value).IsRequired().HasColumnType("decimal(18,2)");
-            builder.Property(p => p.Quantity).IsRequired();
-            builder.Property(p => p.Description).IsRequired();
+            builder.ToTable("Product");
+
+            builder.HasKey(p => p.Id)
+            .HasName("PK_Product");
+
+            builder.Property(p => p.Id)
+            .ValueGeneratedOnAdd()
+            .HasColumnName("ProductId")
+            .HasColumnOrder(1)
+            .HasComment("Primary key Product");
+
+            builder.Property(p => p.Name)
+            .IsRequired()
+            .HasColumnOrder(2)
+            .HasColumnName("ProductName")
+            .HasColumnType("VARCHAR(100)")
+            .HasComment("Name of Product");
+
+            builder.Property(p => p.Price)
+            .IsRequired()
+            .HasColumnOrder(3)
+            .HasColumnName("ProductPrice")
+            .HasColumnType("DECIMAL(18,2)")
+            .HasComment("Price of Product");
+
+            builder.Property(p => p.Stock)
+            .IsRequired()
+            .HasColumnOrder(4)
+            .HasColumnName("ProductStock")
+            .HasColumnType("INT")
+            .HasComment("Stock of Product");
+
+            builder.Property(p => p.Description)
+            .IsRequired()
+            .HasColumnOrder(5)
+            .HasColumnName("ProductDescription")
+            .HasColumnType("VARCHAR(500)")
+            .HasComment("Description of Product");
         }
     }
 }

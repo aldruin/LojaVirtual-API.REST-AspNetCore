@@ -8,9 +8,13 @@ namespace LojaVirtual.Domain.Entities
 {
     public sealed class Cart : Entity
     {
-        protected Cart() { }
+        public Cart(Guid userId)
+        {
+            UserId = userId;
+        }
 
         public Guid UserId { get; set; }
-        public ICollection<CartProduct> Products { get; set; }
+        public User? User { get; set; }
+        public List<CartProduct> Products { get; set; } = new List<CartProduct>();
     }
 }

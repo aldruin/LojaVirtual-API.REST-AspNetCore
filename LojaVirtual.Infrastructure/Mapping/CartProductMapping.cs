@@ -13,12 +13,45 @@ namespace LojaVirtual.Infrastructure.Mapping
     {
         public void Configure(EntityTypeBuilder<CartProduct> builder)
         {
-            builder.ToTable("CartProducts");
-            builder.HasKey(cp => cp.Id);
-            builder.Property(cp => cp.Id).ValueGeneratedOnAdd();
-            builder.Property(cp => cp.Quantity).IsRequired();
+            builder.ToTable("CartProduct");
 
-            builder.HasOne(cp => cp.Product).WithMany().HasForeignKey(cp => cp.ProductId);
+            builder.HasKey(cp => cp.Id)
+                .HasName("PK_CartProduct");
+
+            builder.Property(cp => cp.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("CartProductId")
+                .HasColumnOrder(1)
+                .HasComment("Primary key CartProduct");
+
+            builder.Property(cp => cp.CartId)
+                .IsRequired()
+                .HasColumnName("CartId")
+                .HasColumnOrder(2)
+                .HasComment("Foreign key to Cart");
+
+            builder.Property(cp => cp.ProductId)
+                .IsRequired()
+                .HasColumnName("ProductId")
+                .HasColumnOrder(3)
+                .HasComment("Foreign key to Product");
+
+            builder.Property(cp => cp.Quantity)
+                .IsRequired()
+                .HasColumnName("Quantity")
+                .HasColumnOrder(4)
+                .HasComment("Quantity of Product in Cart");
+
+
+            builder.HasOne(cp => cp.Cart)
+                .WithMany(c => c.Products)
+                .HasForeignKey(cp => cp.CartId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(cp => cp.Product)
+                .WithMany()
+                .HasForeignKey(cp => cp.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

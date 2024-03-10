@@ -51,18 +51,18 @@ namespace LojaVirtual.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Products",
+                name: "Product",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    Value = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Primary key Product"),
+                    ProductName = table.Column<string>(type: "VARCHAR(100)", nullable: false, comment: "Name of Product"),
+                    ProductPrice = table.Column<decimal>(type: "DECIMAL(18,2)", nullable: false, comment: "Price of Product"),
+                    ProductStock = table.Column<int>(type: "INT", nullable: false, comment: "Stock of Product"),
+                    ProductDescription = table.Column<string>(type: "VARCHAR(500)", nullable: false, comment: "Description of Product")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.PrimaryKey("PK_Product", x => x.ProductId);
                 });
 
             migrationBuilder.CreateTable(
@@ -172,17 +172,17 @@ namespace LojaVirtual.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Carts",
+                name: "Cart",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Primary key Cart"),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Foreign key to User")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Carts", x => x.Id);
+                    table.PrimaryKey("PK_Cart", x => x.CartId);
                     table.ForeignKey(
-                        name: "FK_Carts_AspNetUsers_UserId",
+                        name: "FK_Cart_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -190,28 +190,29 @@ namespace LojaVirtual.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CartProducts",
+                name: "CartProduct",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false)
+                    CartProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Primary key CartProduct"),
+                    CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Foreign key to Cart"),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Foreign key to Product"),
+                    Quantity = table.Column<int>(type: "int", nullable: false, comment: "Quantity of Product in Cart")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CartProducts", x => x.Id);
+                    table.PrimaryKey("PK_CartProduct", x => x.CartProductId);
                     table.ForeignKey(
-                        name: "FK_CartProducts_Carts_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Carts",
-                        principalColumn: "Id",
+                        name: "FK_CartProduct_Cart_CartId",
+                        column: x => x.CartId,
+                        principalTable: "Cart",
+                        principalColumn: "CartId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CartProducts_Products_ProductId",
+                        name: "FK_CartProduct_Product_ProductId",
                         column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalTable: "Product",
+                        principalColumn: "ProductId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -254,15 +255,20 @@ namespace LojaVirtual.Infrastructure.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CartProducts_ProductId",
-                table: "CartProducts",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Carts_UserId",
-                table: "Carts",
+                name: "IX_Cart_UserId",
+                table: "Cart",
                 column: "UserId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartProduct_CartId",
+                table: "CartProduct",
+                column: "CartId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartProduct_ProductId",
+                table: "CartProduct",
+                column: "ProductId");
         }
 
         /// <inheritdoc />
@@ -284,16 +290,16 @@ namespace LojaVirtual.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CartProducts");
+                name: "CartProduct");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Carts");
+                name: "Cart");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "Product");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

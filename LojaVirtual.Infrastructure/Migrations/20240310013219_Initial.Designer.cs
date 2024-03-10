@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LojaVirtual.Infrastructure.Migrations
 {
     [DbContext(typeof(LojaVirtualDbContext))]
-    [Migration("20240228122952_Initial")]
+    [Migration("20240310013219_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -29,62 +29,102 @@ namespace LojaVirtual.Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("CartId")
+                        .HasColumnOrder(1)
+                        .HasComment("Primary key Cart");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("UserId")
+                        .HasColumnOrder(2)
+                        .HasComment("Foreign key to User");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK_Cart");
 
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Carts", (string)null);
+                    b.ToTable("Cart", (string)null);
                 });
 
             modelBuilder.Entity("LojaVirtual.Domain.Entities.CartProduct", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("CartProductId")
+                        .HasColumnOrder(1)
+                        .HasComment("Primary key CartProduct");
+
+                    b.Property<Guid>("CartId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("CartId")
+                        .HasColumnOrder(2)
+                        .HasComment("Foreign key to Cart");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("ProductId")
+                        .HasColumnOrder(3)
+                        .HasComment("Foreign key to Product");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Quantity")
+                        .HasColumnOrder(4)
+                        .HasComment("Quantity of Product in Cart");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK_CartProduct");
+
+                    b.HasIndex("CartId");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartProducts", (string)null);
+                    b.ToTable("CartProduct", (string)null);
                 });
 
             modelBuilder.Entity("LojaVirtual.Domain.Entities.Product", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("ProductId")
+                        .HasColumnOrder(1)
+                        .HasComment("Primary key Product");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("VARCHAR(500)")
+                        .HasColumnName("ProductDescription")
+                        .HasColumnOrder(5)
+                        .HasComment("Description of Product");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("VARCHAR(100)")
+                        .HasColumnName("ProductName")
+                        .HasColumnOrder(2)
+                        .HasComment("Name of Product");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("DECIMAL(18,2)")
+                        .HasColumnName("ProductPrice")
+                        .HasColumnOrder(3)
+                        .HasComment("Price of Product");
 
-                    b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Stock")
+                        .HasColumnType("INT")
+                        .HasColumnName("ProductStock")
+                        .HasColumnOrder(4)
+                        .HasComment("Stock of Product");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK_Product");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Product", (string)null);
                 });
 
             modelBuilder.Entity("LojaVirtual.Domain.Entities.User", b =>
@@ -286,26 +326,30 @@ namespace LojaVirtual.Infrastructure.Migrations
 
             modelBuilder.Entity("LojaVirtual.Domain.Entities.Cart", b =>
                 {
-                    b.HasOne("LojaVirtual.Domain.Entities.User", null)
-                        .WithOne("Carts")
+                    b.HasOne("LojaVirtual.Domain.Entities.User", "User")
+                        .WithOne("Cart")
                         .HasForeignKey("LojaVirtual.Domain.Entities.Cart", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LojaVirtual.Domain.Entities.CartProduct", b =>
                 {
-                    b.HasOne("LojaVirtual.Domain.Entities.Cart", null)
+                    b.HasOne("LojaVirtual.Domain.Entities.Cart", "Cart")
                         .WithMany("Products")
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("LojaVirtual.Domain.Entities.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Cart");
 
                     b.Navigation("Product");
                 });
@@ -368,8 +412,7 @@ namespace LojaVirtual.Infrastructure.Migrations
 
             modelBuilder.Entity("LojaVirtual.Domain.Entities.User", b =>
                 {
-                    b.Navigation("Carts")
-                        .IsRequired();
+                    b.Navigation("Cart");
                 });
 #pragma warning restore 612, 618
         }

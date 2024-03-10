@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace LojaVirtual.Domain.Entities
 {
-    public sealed class User : IdentityUser <Guid>
+    public sealed class User : IdentityUser<Guid>
     {
-        protected User() { }
-
-        public Cart Carts { get; set; }
+        public User(string userName, string email) : base(userName)
+        {
+            Email = email;
+        }
+        public Cart? Cart { get; set; }
     }
 }
