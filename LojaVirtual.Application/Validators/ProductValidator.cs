@@ -1,8 +1,8 @@
 using FluentValidation;
-using LojaVirtual.Domain.Entities;
+using LojaVirtual.Application.DataTransferObjects;
 
-namespace LojaVirtual.Domain.Validators;
-public sealed class ProductValidator : AbstractValidator<Product>
+namespace LojaVirtual.Application.Validators;
+public sealed class ProductValidator : AbstractValidator<ProductDto>
 {
     public ProductValidator()
     {

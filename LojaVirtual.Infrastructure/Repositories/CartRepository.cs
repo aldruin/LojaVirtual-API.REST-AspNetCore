@@ -1,6 +1,7 @@
 ﻿using LojaVirtual.Domain.Abstractions;
 using LojaVirtual.Domain.Entities;
 using LojaVirtual.Infrastructure.Context;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,12 @@ namespace LojaVirtual.Infrastructure.Repositories
         public CartRepository(LojaVirtualDbContext context) : base(context)
         {
         }
+
+        public async Task<Cart> GetCartByUserIdAsync(Guid userId)
+        {
+            var cart = await Query.Cast<Cart>().Where(c => c.UserId == userId).FirstOrDefaultAsync();
+            return cart;
+        }
+
     }
 }

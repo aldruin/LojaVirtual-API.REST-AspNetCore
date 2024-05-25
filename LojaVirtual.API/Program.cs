@@ -1,9 +1,10 @@
 using LojaVirtual.Infrastructure;
+using LojaVirtual.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    //.RegisterApplication(builder.Configuration)
+    .RegisterApplication(builder.Configuration)
     .RegisterRepository(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -19,7 +20,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 app.UseCors("CorsPolicy");
 app.UseAuthentication();
-app.UseAuthorization();
+//app.UseAuthorization();
 app.MapControllers();
 
 app.Run();

@@ -9,5 +9,6 @@ namespace LojaVirtual.Domain.Abstractions
 {
     public interface ICartRepository : IRepository<Cart>
     {
+        Task<Cart> GetCartByUserIdAsync(Guid userId);
     }
 }

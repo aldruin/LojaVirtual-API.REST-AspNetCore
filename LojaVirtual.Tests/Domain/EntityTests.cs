@@ -9,14 +9,15 @@ namespace LojaVirtual.Tests.Domain
         public void User_ShouldCreateInstanceWithProperties()
         {
             // Arrange
-            string username = "testuser";
+            string name = "Aldruin Souza";
             string email = "test@example.com";
+            string cpf = "051.980.849-56";
 
             // Act
-            var user = new User(username, email);
+            var user = new User(name, email, cpf);
 
             // Assert
-            Assert.Equal(username, user.UserName);
+            Assert.Equal(name, user.UserName);
             Assert.Equal(email, user.Email);
         }
 

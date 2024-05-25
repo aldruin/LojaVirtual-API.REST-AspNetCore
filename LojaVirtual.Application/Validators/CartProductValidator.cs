@@ -1,8 +1,8 @@
 using FluentValidation;
 using LojaVirtual.Domain.Entities;
 
-namespace LojaVirtual.Domain.Validators;
-public class CartProductValidator : AbstractValidator<CartProduct>
+namespace LojaVirtual.Application.Validators;
+public sealed class CartProductValidator : AbstractValidator<CartProduct>
 {
     public CartProductValidator()
     {

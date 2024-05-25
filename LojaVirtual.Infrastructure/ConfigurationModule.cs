@@ -22,14 +22,6 @@ namespace LojaVirtual.Infrastructure
                 x.UseSqlServer(connectionString);
             });
 
-            //services.AddIdentity<User, IdentityRole<Guid>>(options =>
-            //{
-            //    options.SignIn.RequireConfirmedAccount = false;
-            //    options.User.RequireUniqueEmail = true;
-            //})
-            //    .AddEntityFrameworkStores<LojaVirtualDbContext>()
-            //    .AddDefaultTokenProviders();
-
             services.AddScoped(typeof(Repository<>));
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
